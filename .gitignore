@@ -1,0 +1,13 @@
+auto-save-list/
+custom-vars.el
+eln-cache/
+elpa/
+games/
+history
+myinit.el
+places
+projectile-bookmarks.eld
+recentf
+speed-type/
+tramp
+transient/
