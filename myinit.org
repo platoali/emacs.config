@@ -896,7 +896,7 @@ convert an org file to the html presentation
 (use-package bats-mode )
 #+end_src
 
-* meow
+* COMMENT meow
 #+begin_src emacs-lisp
 (use-package meow )
 (defun meow-setup ()
