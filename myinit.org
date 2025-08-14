@@ -94,7 +94,6 @@ make environment variabls look like Shell. Specially since emacs executed from s
 #+RESULTS:
 : t
 
-
 * Interface tweeks
 - clean the interface. (no tool-bar, no scroll bar, no menu bar. )
 - add line number globally  except in shells and org mode.
@@ -267,7 +266,6 @@ The selected them and customizations
 * Org mode Stuff
 the org mode customizations
 #+begin_src emacs-lisp
-
   (use-package org
               )
   (use-package org-bullets
@@ -276,8 +274,6 @@ the org mode customizations
   (custom-set-variables
    '(org-directoy "~/orgFiles")
    '(org-default-notes-file (concat org-directory "/notes.org")))
-
-
   (custom-set-variables
        '(org-directoy "~/orgFiles")
        '(org-default-notes-file (concat org-directory "/notes.org/"))
@@ -285,7 +281,6 @@ the org mode customizations
        '(org-hide-leading-stars t)
        '(org-startup-indented t)
        )
-
       (global-set-key "\C-ca" 'org-agenda)
       (global-set-key "\C-Cc" 'org-capture)
   (defun set-bidi-env ()
@@ -356,13 +351,9 @@ Persist history over Emacs restarts. Vertico sorts by history position.
       :custom
       (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
       )
-
     (recentf-mode)
     (use-package consult-yasnippet )
-
     (setq completion-ignore-case t)
-
-  
     (setq read-file-name-completion-ignore-case t)
 #+end_src
 
@@ -519,7 +510,6 @@ Persist history over Emacs restarts. Vertico sorts by history position.
     :config
     (add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp")))
     )
-
 #+end_src
 
 * cape 
@@ -886,7 +876,7 @@ convert an org file to the html presentation
     )
 #+end_src
 
-* nixox
+* nix OS
 #+begin_src  emacs-lisp
 (use-package nix-mode ) 
 #+end_src
