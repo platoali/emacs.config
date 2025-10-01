@@ -9,6 +9,11 @@
     (set-keyboard-coding-system 'utf-8-unix)
     (set-input-method "farsi-isiri-9147" t)
   (setq use-package-always-ensure t)
+  (set-face-attribute 'default nil
+   		    :family "JetBrains Mono" ;; font name
+   		    :height 120             ;; font size in 1/10pt (120 = 12pt)
+   		    :weight 'normal
+   		    :width 'normal)
 
 #+end_src
 
@@ -717,15 +722,9 @@ convert an org file to the html presentation
     :custom
     (speed-type-default-lang 'English)
     :config 
-    (add-hook `speed-type-mode-hook (lambda ()  (corfu-mode -1)))
-  )
-
-
-
+    (add-hook `speed-type-mode-hook (lambda ()   
+  				    (corfu-mode -1))))
 #+end_src
-
-#+RESULTS:
-33
 
 * evil-mode
 #+begin_src emacs-lisp
@@ -985,18 +984,24 @@ convert an org file to the html presentation
 #+end_src)
 * Check if everything is OK
 #+begin_src emacs-lisp
-    (add-hook 'after-make-frame-functions   (lambda  (frame)  
-  ;;  					  (menu-bar-mode -1)
-    					  (toggle-input-method)
-    					  (toggle-input-method)
-    					  (setq bidi-paragraph-direction nil)
-    					  (set-frame-font "Vazirmatn 11" t t nil)
-    					  (hl-line-mode 1)
-    					  (scroll-bar-mode -1)
-    					  (tool-bar-mode -1) ))
+      (add-hook 'after-make-frame-functions   (lambda  (frame)  
+      					  (menu-bar-mode -1)
+      					  (toggle-input-method)
+      					  (toggle-input-method)
+      					  (setq bidi-paragraph-direction nil)
+      	;;				  (set-frame-font "Vazirmatn 11" t t nil)
+    					  ;; (set-face-attribute 'default nil
+    					  ;; 		      :family "JetBrains Mono" ;; font name
+    					  ;; 		      :height 100             ;; font size in 1/10pt (120 = 12pt)
+    					  ;; 		      :weight 'normal
+    					  ;; 		      :width 'normal)
+    					  (set-frame-font "JetBrains Mono 12" t t nil)
+      					  (hl-line-mode 1)
+      					  (scroll-bar-mode -1)
+      					  (tool-bar-mode -1) ))
 
-    (set-input-method "farsi-isiri-9147" t)
-    (toggle-input-method)
+      (set-input-method "farsi-isiri-9147" t)
+      (toggle-input-method)
 
 #+end_src
 
