@@ -976,6 +976,11 @@ convert an org file to the html presentation
     (meow-global-mode 1))
    #+end_src
 
+* markdown
+#+begin_src emacs-lisp
+(use-package markdown-mode)
+#+end_src
+
 * COMMENT Copilot
 #+begin_src emacs-lisp
 (use-package copilot
