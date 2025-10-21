@@ -71,16 +71,33 @@ async package manager. Commented it does not still work with exwm.
 * change  auto-save files location
 Save auto save file in a separate directory. don't litter the file system with autosave files.
 #+begin_src emacs-lisp
-  (setq
-   backup-by-copying t      ; don't clobber symlinks
-   backup-directory-alist
-    '(("." . "~/.saves/"))    ; don't litter my fs tree
-   delete-old-versions t
-   kept-new-versions 6
-   kept-old-versions 2
-   version-control t)
+;; Central autosave/backup directory
+(defvar my-auto-save-folder "~/.emacs.d/autosaves/")
+(make-directory my-auto-save-folder t)
 
-  
+;; Move backup files (~)
+(setq backup-directory-alist
+      `((".*" . ,my-auto-save-folder)))
+
+;; Move autosave files (#...#)
+(setq auto-save-file-name-transforms
+      `((".*" ,my-auto-save-folder t)))
+
+;; Disable lockfiles (no .# files)
+(setq create-lockfiles nil)
+
+
+
+    ;;(setq
+     ;; backup-by-copying t      ; don't clobber symlinks
+     ;; backup-directory-alist
+     ;;    '(("." . "~/.saves/"))    ; don't litter my fs tree
+     ;;    delete-old-versions t
+     ;;    kept-new-versions 6
+     ;;    kept-old-versions 2
+     ;;    version-control t)
+
+
 #+end_src
 
 #+RESULTS:
@@ -319,7 +336,7 @@ the org mode customizations
 
   #+RESULTS:
 
-*  saveHise
+* saveHise
 Persist history over Emacs restarts. Vertico sorts by history position.
 #+begin_src emacs-lisp
   (use-package savehist
@@ -369,8 +386,8 @@ Persist history over Emacs restarts. Vertico sorts by history position.
 #+begin_src emacs-lisp
   (use-package embark
     :bind    (("C-," . embark-act)         ;; pick some comfortable binding
-     ("C-;" . embark-dwim)        ;; good alternative: M-.
-     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+  	    ("C-;" . embark-dwim)        ;; good alternative: M-.
+  	    ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
     :init
     ;; Optionally replace the key help with a completing-read interface
@@ -496,7 +513,7 @@ Persist history over Emacs restarts. Vertico sorts by history position.
   ;  (use-package dap-haskell)
   #+end_src 
 
-* Company ghci
+* COMMENT Company ghci
 #+begin_src emacs-lisp 
   (use-package company-ghci
     :config
@@ -595,7 +612,7 @@ Persist history over Emacs restarts. Vertico sorts by history position.
 
 #+RESULTS:
 
-* org-reveal
+* COMMENT org-reveal
 convert an org file to the html presentation
 #+begin_src emacs-lisp
   (use-package ox-reveal
@@ -705,7 +722,7 @@ convert an org file to the html presentation
 #+begin_src emacs-lisp
   (use-package magit)
 #+end_src
-* helpful
+* COMMENT helpful
 #+begin_src emacs-lisp
   (use-package helpful
     :bind
@@ -726,12 +743,12 @@ convert an org file to the html presentation
   				    (corfu-mode -1))))
 #+end_src
 
-* evil-mode
+* COMMENT evil-mode
 #+begin_src emacs-lisp
   (use-package evil
   )
 #+end_src
-* transpost frame
+* COMMENT transpost frame
 #+begin_src  emacs-lisp
 (use-package transpose-frame)
     
