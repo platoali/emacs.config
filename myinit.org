@@ -68,37 +68,28 @@ async package manager. Commented it does not still work with exwm.
 
 #+RESULTS:
 
-* change  auto-save files location
+* COMMENT change  auto-save files location
 Save auto save file in a separate directory. don't litter the file system with autosave files.
 #+begin_src emacs-lisp
-;; Central autosave/backup directory
-(defvar my-auto-save-folder "~/.emacs.d/autosaves/")
-(make-directory my-auto-save-folder t)
 
-;; Move backup files (~)
+;; Directory for autosaves and backups
+(defvar my-auto-save-folder (expand-file-name "~/.emacs.d/autosaves/"))
+(unless (file-directory-p my-auto-save-folder)
+  (make-directory my-auto-save-folder t))
+
+;; Backups (~)
 (setq backup-directory-alist
       `((".*" . ,my-auto-save-folder)))
 
-;; Move autosave files (#...#)
+;; Autosaves (#...#)
 (setq auto-save-file-name-transforms
-      `((".*" ,my-auto-save-folder t)))
+      `((".*" ,(concat my-auto-save-folder "\\1") t)))
 
-;; Disable lockfiles (no .# files)
+;; Disable lockfiles (.#...) if desired
 (setq create-lockfiles nil)
 
 
-
-    ;;(setq
-     ;; backup-by-copying t      ; don't clobber symlinks
-     ;; backup-directory-alist
-     ;;    '(("." . "~/.saves/"))    ; don't litter my fs tree
-     ;;    delete-old-versions t
-     ;;    kept-new-versions 6
-     ;;    kept-old-versions 2
-     ;;    version-control t)
-
-
-#+end_src
+  
 
 #+RESULTS:
 : t
@@ -438,6 +429,7 @@ Persist history over Emacs restarts. Vertico sorts by history position.
     (global-corfu-mode)
     (corfu-history-mode)
     )
+  (keymap-global-set "C-." 'completion-at-point)
 
 #+end_src
 
@@ -497,7 +489,7 @@ Persist history over Emacs restarts. Vertico sorts by history position.
     :init
     (setq haskell-tags-on-save t)        
     :config
-    (add-hook 'haskell-mode-hook 'eglot-ensure)
+;;    (add-hook 'haskell-mode-hook 'eglot-ensure)
     )
   (use-package hindent )
  #+end_src
@@ -529,9 +521,27 @@ Persist history over Emacs restarts. Vertico sorts by history position.
 * eglot (another lsp-server)
 #+begin_src emacs-lisp
   (use-package eglot
+    :ensure t
     :config
-    (add-to-list 'eglot-server-programs '(nix-mode . ("rnix-lsp")))
+    (add-to-list 'eglot-server-programs '(markdown-mode . ("marksman")))
+    (add-to-list 'eglot-server-programs '(nix-mode . ("nixd")))
+    (add-to-list 'eglot-server-programs '(sh-mode . ("bash-language-server"  "start")))
+    ;;(add-to-list 'eglot-server-programs '(haskell-mode . ("haskell-language-server")))
+    (add-hook 'markdown-mode-hook #'eglot-ensure)
+    (add-hook 'haskell-mode-hook 'eglot-ensure) ; start eglot automatically in haskell projects
+    (add-hook 'nix-mode-hook 'eglot-ensure )
+    (add-hook 'sh-mode 'eglot-ensure)
+    (add-hook 'bash-mode 'eglot-ensure)
+    :config
+    (setq-default eglot-workspace-configuration
+                '(:haskell (:plugin (:stan (:globalOn :json-false)) ; disable stan
+                            :formattingProvider "fourmolu")))       ; use fourmolu instead of ormolu
+    :custom
+    (eglot-autoshutdown t)  ; shutdown language server after closing last file
+    (eglot-confirm-server-initiated-edits nil)  ; allow edits without confirmation
     )
+
+      
 #+end_src
 
 * cape 
@@ -540,6 +550,7 @@ Persist history over Emacs restarts. Vertico sorts by history position.
     :init
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
     (add-to-list 'completion-at-point-functions #'cape-file)
+    (add-to-list 'completion-at-point-functions #'cape-keyword)
     )
 #+end_src
 
@@ -595,18 +606,21 @@ Persist history over Emacs restarts. Vertico sorts by history position.
 #+end_src
 
 #+RESULTS:
-* COMMENT Yasnippet
+*  Yasnippet
 #+begin_src emacs-lisp
-  (use-package yasnippet
-    :init 
-;    (setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
-    (yas-global-mode 1)
-    )
+    (use-package yasnippet
+      :init 
+  ;    (setq yas-snippet-dirs '("~/.emacs.d/snippets/"))
+      (yas-global-mode 1)
+      )
 
-  (use-package yasnippet-snippets
-    )
-  (use-package haskell-snippets
-    )
+    (use-package yasnippet-snippets
+      )
+    (use-package haskell-snippets
+      )
+   (use-package yasnippet-capf
+     :after  (yasnippet cape)
+     :config (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 #+end_src
 
 
@@ -894,7 +908,10 @@ convert an org file to the html presentation
 
 * nix OS
 #+begin_src  emacs-lisp
-(use-package nix-mode ) 
+      (use-package nix-mode
+        :config
+         (add-hook 'nix-mode-hook 'eglot-ensure))
+
 #+end_src
 
 * bats
@@ -902,7 +919,7 @@ convert an org file to the html presentation
 (use-package bats-mode )
 #+end_src
 
-* meow
+* COMMENT meow
 #+begin_src emacs-lisp  
   (use-package meow
     :init
